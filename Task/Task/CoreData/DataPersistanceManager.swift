@@ -46,4 +46,25 @@ class DataPersistanceManager {
    
     }
     
+    
+    //MARK:- Fetch Products
+    func fetchProductsFormDatabase(completion: @escaping (Result<[ProductItem], Error>)->Void)  {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
+        
+        let context =  appDelegate.persistentContainer.viewContext
+        
+        let request : NSFetchRequest<ProductItem>
+        request = ProductItem.fetchRequest()
+        
+        do{
+            let productItems = try context.fetch(request)
+            completion(.success(productItems))
+        }catch {
+            completion(.failure(DatabaseError.failedToFetchData))
+            
+        }
+        
+    }
+    
 }
