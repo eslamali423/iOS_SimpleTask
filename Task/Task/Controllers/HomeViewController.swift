@@ -24,7 +24,7 @@ class HomeViewController: UIViewController {
     //MARK:- Life Cyccle
     override func viewDidLoad() {
         super.viewDidLoad()
-   
+   handelAuthentication()
         registerCells()
         
         getCategoryData()
@@ -40,6 +40,17 @@ class HomeViewController: UIViewController {
         productsCollectionView.delegate = self
         productsCollectionView.dataSource = self
         
+    }
+    
+    //MARK:- Handel Authentication  (Auto Login)
+    func handelAuthentication(){
+        if UserDefaults.standard.bool(forKey: "isLoggedIn") == false {
+         
+            let loginVc = LoginViewController()
+            loginVc.modalPresentationStyle = .fullScreen
+            present(loginVc, animated: true, completion: nil)
+            
+        }
     }
  
     //MARK:- Configure Add Product Button
