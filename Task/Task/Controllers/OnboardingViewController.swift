@@ -46,7 +46,8 @@ class OnboardingViewController : UIViewController {
         let segment = UISegmentedControl (items: ["Sign Up","Log In"])
         segment.translatesAutoresizingMaskIntoConstraints =  false
         segment.selectedSegmentIndex = 0
-        segment.layer.cornerRadius = 40
+        segment.layer.cornerRadius = 15
+        segment.clipsToBounds = true
         let font = UIFont.systemFont(ofSize: 20,weight: .bold)
         segment.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
         segment.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
@@ -102,7 +103,6 @@ class OnboardingViewController : UIViewController {
     //MARK:- Segment Controll Actions
     @objc func segmentedControlValueChanged () {
         if segmentedControll.selectedSegmentIndex == 1 {
-            print ("login pressed ")
             let loginVc = LoginViewController()
             loginVc.modalPresentationStyle = .fullScreen
             present(loginVc, animated: true, completion: nil)

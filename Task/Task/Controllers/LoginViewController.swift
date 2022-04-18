@@ -214,6 +214,8 @@ class LoginViewController: UIViewController {
             let HomeVc = storyboard.instantiateViewController(withIdentifier: "ContainerTabBarController") as! ContainerTabBarController
             HomeVc.modalPresentationStyle = .fullScreen
             self.present(HomeVc, animated: true)
+            UserDefaults.standard.set(true, forKey: "isLoggedIn")
+            UserDefaults.standard.synchronize()
             
         }else {
             // TODO:- Show Custom Error Message
