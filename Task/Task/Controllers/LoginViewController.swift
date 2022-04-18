@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import ProgressHUD
 class LoginViewController: UIViewController {
  
     //MARK:- Username and Password Constant
@@ -204,6 +204,7 @@ class LoginViewController: UIViewController {
         guard let username = usernameField.text, !username.isEmpty,
               let password = passwordField.text, !password.isEmpty else {
             //TODO:- show error messaage in progress (ALL Fields Are Requierd)
+            ProgressHUD.showError("ALL Fields Are Requierd")
             return
         }
         if username == Constant.username && password == Constant.password {
@@ -219,6 +220,8 @@ class LoginViewController: UIViewController {
             
         }else {
             // TODO:- Show Custom Error Message
+            ProgressHUD.showError("Username or Password worng, Please try again")
+
             print("Error Login")
         }
         

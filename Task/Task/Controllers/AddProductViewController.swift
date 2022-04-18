@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class AddProductViewController: UIViewController {
     
@@ -266,6 +267,7 @@ class AddProductViewController: UIViewController {
             let price = PriceField.text, !price.isEmpty
              else {
             // TODO:- Add custom progressHUD
+            ProgressHUD.showError("All fields are Required")
             return
         }
         
@@ -273,7 +275,8 @@ class AddProductViewController: UIViewController {
         
         
         addProduct(product: newProduct)
-        
+        ProgressHUD.showSuccess("Product Added Successfully")
+        navigationController?.popViewController(animated: true)
         
         
     }

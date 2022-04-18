@@ -15,6 +15,7 @@ class MyProductsViewController: UIViewController {
     //MARK:- Vars
     @IBOutlet weak var tableView: UITableView!
   
+
     var viewModel = MyProductsViewModel()
     
     var bag = DisposeBag()
@@ -30,6 +31,8 @@ class MyProductsViewController: UIViewController {
        
         viewModel.getProducts()
         bindToTableview()
+        
+        
         // Do any additional setup after loading the view.
     }
 
