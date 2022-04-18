@@ -15,6 +15,8 @@ class AddProductViewController: UIViewController {
     var pickerView = UIPickerView()
     
     
+    let imagePicker = UIImagePickerController()
+
     
     
     //MARK:- Outlets
@@ -42,10 +44,14 @@ class AddProductViewController: UIViewController {
         button.layer.shadowColor = UIColor.gray.cgColor
         button.layer.borderWidth = 0.1
         button.layer.borderColor = UIColor.gray.cgColor
-        //  button.addTarget(self, action: #selector(didTapSignInButton), for: .touchUpInside)
+          button.addTarget(self, action: #selector(didtapAddImageButton), for: .touchUpInside)
+        button.clipsToBounds = true
         
         return button
     }()
+    
+   
+  
     
     private let productNameField : UITextField = {
         let textField = UITextField()
@@ -163,7 +169,9 @@ class AddProductViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
         
+        
         view.addSubview(addImagesLabel)
+       
         view.addSubview(addButton)
         view.addSubview(productNameField)
         view.addSubview(productInfoField)
@@ -171,6 +179,8 @@ class AddProductViewController: UIViewController {
         view.addSubview(typeField)
         view.addSubview(PriceField)
         view.addSubview(doneButton)
+
+        imagePicker.delegate = self
 
         
         configureConstraints()
@@ -182,13 +192,22 @@ class AddProductViewController: UIViewController {
         CategoryField.inputView = pickerView
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    configureConstraints()
+    }
     //MARK:- Constraints
     func configureConstraints(){
+        
+       
         
         NSLayoutConstraint.activate([
             
             addImagesLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
             addImagesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
+          
             
             addButton.topAnchor.constraint(equalTo: addImagesLabel.bottomAnchor,constant: 10),
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -264,6 +283,68 @@ class AddProductViewController: UIViewController {
         
     }
     
+    //MARK:- Add Image Button Action
+    @objc func didtapAddImageButton(){
+        
+        // open camera
+        let actionAlert =  UIAlertController(title: "change Profile Picture", message: "", preferredStyle: .actionSheet)
+        actionAlert.addAction(UIAlertAction(title: "Open Camera", style: .default, handler: { (handler) in
+            
+            self.photoFromCamera()
+            
+            
+        }))
+        
+        // open camera roll
+        actionAlert.addAction(UIAlertAction(title: "Choose From Camera Roll", style: .default, handler: { (handler) in
+            
+            
+            self.photoFromLibrary()
+            
+            
+        }))
+        // to cancel
+        actionAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (handler) in
+            return
+        }))
+
+        self.present(actionAlert, animated: true, completion: nil)
+        
+        
+    }
+    
+    // photo from Libraray
+    func photoFromLibrary() {
+        imagePicker.allowsEditing = true
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+        imagePicker.modalPresentationStyle = .popover
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    
+    //photo form Camera
+    func  photoFromCamera() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            imagePicker.allowsEditing = false
+            imagePicker.sourceType = UIImagePickerController.SourceType.camera
+            imagePicker.cameraCaptureMode = .photo
+            imagePicker.modalPresentationStyle = .fullScreen
+            present(imagePicker,animated: true,completion: nil)
+        } else {
+            noCamera()
+        }
+    }
+    
+    func noCamera(){
+        let alertVC = UIAlertController(title: "No Camera", message: "Sorry, this device has no camera",preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style:.default, handler: nil)
+        
+        alertVC.addAction(okAction)
+        present( alertVC, animated: true, completion: nil)
+    }
+    
+    
     
 }
 //MARK:- Extension For PickerView
@@ -284,6 +365,29 @@ extension AddProductViewController : UIPickerViewDelegate, UIPickerViewDataSourc
         CategoryField.text = categoryViewModel.categoies[row].name
         CategoryField.resignFirstResponder()
     }
+    
+    
+}
+
+//MARK:- Extension for Image Picker Controller
+extension AddProductViewController : UIImagePickerControllerDelegate , UINavigationControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let  pickedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+           
+            self.addButton.setImage(pickedImage, for: .normal)
+          
+            // TODO:- Covert Image to NSData to Set In core Data
+        }
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+    
+ 
+    
     
     
 }
