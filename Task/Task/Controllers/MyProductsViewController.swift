@@ -21,26 +21,30 @@ class MyProductsViewController: UIViewController {
 
     
     
-    
+    //MARK:- Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.tableFooterView = UIView()
         
-        
+       
         viewModel.getProducts()
         bindToTableview()
         // Do any additional setup after loading the view.
     }
 
+    
+    //MARK:- Bind To TableView
     func bindToTableview(){
+       //Bind
         viewModel.products.bind(to: tableView.rx.items(cellIdentifier: "cell" , cellType: ProductTableViewCell.self)) { row , item , cell in
             
             cell.configure(model: item)
             
             
         }.disposed(by: bag)
- 
+        
+        //set delegate
         self.tableView.rx.setDelegate(self)
                     .disposed(by: bag)
     
@@ -48,26 +52,19 @@ class MyProductsViewController: UIViewController {
         tableView.rx.itemDeleted.subscribe(onNext: { [weak self] indexPath in
             guard let self = self else {return}
             self.viewModel.deleteProduct(index: indexPath.row)
-        })
-        
-        
+        }).disposed(by: bag)
+
     }
     
     
     
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
+
+//MARK:- Extension for TableView Delegate
 extension MyProductsViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

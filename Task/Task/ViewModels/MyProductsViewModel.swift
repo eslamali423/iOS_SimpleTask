@@ -13,6 +13,7 @@ class MyProductsViewModel{
     
     var products = BehaviorSubject(value: [ProductItem]())
 
+    //MARK:- Fetch All Products Form Local Database
     func getProducts(){
         
         DataPersistanceManager.shared.fetchProductsFormDatabase { (result) in
@@ -27,12 +28,26 @@ class MyProductsViewModel{
         
     }
     
+    //MARK:- Delete Product Form Loacl Database
     func deleteProduct(index : Int) {
-        guard var products = try?  products.value() else {
+        
+        
+        guard var temp = try?  products.value() else {
             return
         }
-        products.remove(at: index)
-        self.products.on(.next(products))
+        DataPersistanceManager.shared.deleteProduct(model: temp[index]) { (result) in
+            switch result {
+            case .success():
+                temp.remove(at: index)
+                self.products.on(.next(temp))
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+       
+        
+        
+        
     }
 
     

@@ -24,6 +24,8 @@ class HomeViewController: UIViewController {
     //MARK:- Life Cyccle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+       
    handelAuthentication()
         registerCells()
         
@@ -41,6 +43,8 @@ class HomeViewController: UIViewController {
         productsCollectionView.dataSource = self
         
     }
+    
+
     
     //MARK:- Handel Authentication  (Auto Login)
     func handelAuthentication(){

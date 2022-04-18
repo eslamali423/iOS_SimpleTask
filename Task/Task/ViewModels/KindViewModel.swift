@@ -14,7 +14,7 @@ class KindViewModel {
     
     func getKinds(completion: @escaping (Bool)->Void)  {
         
-        kinds = [.init(name: "All"),
+        kinds = [.init(name: "  All"),
                  .init(name: "Plates"),
                  .init(name: "Hot Drinks"),
                  .init(name: "Ice Drinks"),
